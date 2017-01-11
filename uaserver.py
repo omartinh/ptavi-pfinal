@@ -65,12 +65,12 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                                 b"SIP/2.0 180 Ring\r\n" +
                                 b"SIP/2.0 200 OK\r\n")
             elif method == 'ACK':
-                aEjecutar = './mp32rtp -i 127.0.0.1 -p ' + rtpaudio['puerto'] + ' < ' + audio_file
+                aEjecutar = 'mp32rtp -i 127.0.0.1 -p ' + rtpaudio['puerto'] + ' < ' + audio_file
                 print("Vamos a ejecutar: " + aEjecutar)
                 os.system(aEjecutar)
             elif method == 'BYE':
                 self.wfile.write(b"SIP/2.0 200 OK\r\n")
-            elif method not in ['ACK', 'INVITE', 'BYE']:
+            elif not method in ['ACK', 'INVITE', 'BYE']:
                 print("Metodo erroneo: " + method)
                 self.wfile.write(b"SIP/2.0 405 Method Not Allowed \r\n")
             else:
@@ -89,6 +89,7 @@ if __name__ == "__main__":
     parser.setContentHandler(cHandler)
     parser.parse(open(CONFIG))
     data = cHandler.get_tags()
+    #  print(data)
 
     proxy = data[3][1]
     log = data[4][1]
