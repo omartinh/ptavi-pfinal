@@ -1,0 +1,6 @@
+<config>
+    <server name="SAserver" ip="127.0.0.1" puerto="5678"/>
+    <database path="database.txt" passwdpath="passwords"/>
+    <log path="logpr.txt"/>
+
+</config>
