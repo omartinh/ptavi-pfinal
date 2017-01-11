@@ -1,5 +1,5 @@
-#!/usr/bin/python3
-#-*- coding: utf-8 -*-
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import socket
 import os
@@ -19,23 +19,20 @@ class SmallSMILHandler(ContentHandler):
 
     def __init__(self):
 
-
         self.lista = []
-        self.dicc = {"account" : ["username","passwd"],
-                    "uaserver" : ["ip","puerto"],
-                    "rtpaudio" : ["puerto"],
-                    "regproxy" : ["ip","puerto"],
-                    "log" : ["path"],
-                    "audio" : ["path"]}
-
+        self.dicc = {"account": ["username", "passwd"],
+                    "uaserver": ["ip", "puerto"],
+                    "rtpaudio": ["puerto"],
+                    "regproxy": ["ip", "puerto"],
+                    "log": ["path"],
+                    "audio": ["path"]}
 
     def startElement(self, name, attrs):
         if name in self.dicc:
-            empty={}
+            empty = {}
             for atrib in self.dicc[name]:
-                empty[atrib] = attrs.get(atrib,"")
-            self.lista.append([name,empty])
-
+                empty[atrib] = attrs.get(atrib, "")
+            self.lista.append([name, empty])
 
     def get_tags(self):
         return self.lista
@@ -48,6 +45,7 @@ def AddLog(path, tiempo, event):
     fich.write(time.strftime('%Y%m%d%H%M%S', tiempo))
     fich.write(' ' + event + '\r\n')
     fich.close()
+
 
 class EchoHandler(socketserver.DatagramRequestHandler):
 
@@ -63,16 +61,16 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             tiempo = time.time()
             AddLog(log['path'], tiempo, event)
             if method == 'INVITE':
-                self.wfile.write(b"SIP/2.0 100 Trying\r\n" + 
+                self.wfile.write(b"SIP/2.0 100 Trying\r\n" +
                                 b"SIP/2.0 180 Ring\r\n" +
                                 b"SIP/2.0 200 OK\r\n")
-            elif method == 'ACK': # TRATAR ACK Y ENVIO DE AUDIO
+            elif method == 'ACK':
                 aEjecutar = './mp32rtp -i 127.0.0.1 -p ' + rtpaudio['puerto'] + ' < ' + audio_file
                 print("Vamos a ejecutar: " + aEjecutar)
                 os.system(aEjecutar)
             elif method == 'BYE':
                 self.wfile.write(b"SIP/2.0 200 OK\r\n")
-            elif not method in ['ACK', 'INVITE', 'BYE']:
+            elif method not in ['ACK', 'INVITE', 'BYE']:
                 print("Metodo erroneo: " + method)
                 self.wfile.write(b"SIP/2.0 405 Method Not Allowed \r\n")
             else:
@@ -86,13 +84,11 @@ if __name__ == "__main__":
     except:
         sys.exit("Usage: python uaserver.py config")
 
-
     parser = make_parser()
     cHandler = SmallSMILHandler()
     parser.setContentHandler(cHandler)
     parser.parse(open(CONFIG))
-    data=cHandler.get_tags()
-    #  print(data)
+    data = cHandler.get_tags()
 
     proxy = data[3][1]
     log = data[4][1]
@@ -109,4 +105,3 @@ if __name__ == "__main__":
         serv.serve_forever()
     except KeyboardInterrupt:
         print("Servidor Finalizado")
-
