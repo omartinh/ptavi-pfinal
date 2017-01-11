@@ -36,7 +36,6 @@ class SmallSMILHandler(ContentHandler):
     def get_tags(self):
         return self.lista
 
-
 p_file = open('passwords', 'r')
 p_data = p_file.read().split()
 password1 = p_data[1]
@@ -57,6 +56,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         try:
             fich = open('registered.json', 'r')
             self.dicc = fich.load(fich)
+            fich.close()
         except:
             self.dicc = {}
 
@@ -125,8 +125,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                             attr = self.dicc[usser]
                             if t_actual >= attr['expires']:
                                 expired_list.append(usser)
-                            for name in expired_list:
-                                del self.c_dicc[name]
+                                del self.c_dicc[usser]
                         except:
                             pass
 
@@ -146,9 +145,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 sip_line = mensaje_c[1].split(':')
                 guest = sip_line[1]
                 user_origen = mensaje_c[6].split('=')[1]
-                print(" _ _ _ u_origen y guest _ _ _ ")
-                print(user_origen)
-                print(guest)
+
                 #  Log
                 event = 'Send to ' + ip + ':' + str(port) + ':'
                 event += client_m
@@ -173,6 +170,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                         received = my_socket.recv(1024)
                         print(received.decode('utf-8'))
                         linea_r = received.decode('utf-8').split()
+
                         if linea_r[2] == 'Trying' and linea_r[5] == 'Ring' and linea_r[8] == 'OK':
                             self.wfile.write(b"SIP/2.0 100 Trying\r\n\r\n")
                             self.wfile.write(b"SIP/2.0 180 Ring\r\n\r\n")
