@@ -76,10 +76,10 @@ AddLog(log['path'], tiempo, event)
 if METHOD == 'REGISTER':
     Expires = OPTION
     sip_info = account['username'] + ':' + uaserver['puerto']
-    linea1 = " sip:" + sip_info + " SIP/2.0" + "\r\n"
+    linea1 = " sip:" + sip_info + " SIP/2.0\r\n"
     linea2 = "Expires: " + Expires + "\r\n"
     cabecera_r = "REGISTER" + linea1 + linea2
-    #  print("Enviando: " + "\r\n" + cabecera_r)
+    #print("Enviando: " + "\r\n" + cabecera_r)
     my_socket.send(bytes(cabecera_r, 'utf-8') + b'\r\n')
     data = my_socket.recv(1024)
     print(data.decode('utf-8'))
@@ -123,16 +123,16 @@ elif METHOD == 'INVITE':
     linea_sdp = v + o + s + t + m
     cabecera_i = "INVITE" + linea1 + linea2 + linea_sdp
 
-    my_socket.send(bytes(cabecera_i, 'utf-8') + b'\r\n')
-    data = my_socket.recv(1024)
-    print(data.decode('utf-8'))
-    linea_r = data.decode('utf-8').split()
-
     #  Log
     event = 'Send to ' + regproxy['ip'] + ':' + regproxy['puerto'] + ':'
     event += cabecera_i
     tiempo = time.time()
     AddLog(log['path'], tiempo, event)
+
+    my_socket.send(bytes(cabecera_i, 'utf-8') + b'\r\n')
+    data = my_socket.recv(1024)
+    print(data.decode('utf-8'))
+    linea_r = data.decode('utf-8').split()
 
     if linea_r[2] == 'Trying' and linea_r[5] == 'Ring' and linea_r[8] == 'OK':
         User = OPTION
@@ -151,7 +151,7 @@ elif METHOD == 'INVITE':
 
 elif METHOD == 'BYE':
     User = OPTION
-    linea1 = " sip:" + User + " SIP/2.0" + "\r\n"
+    linea1 = " sip:" + User + " SIP/2.0\r\n"
     cabecera_b = "BYE" + linea1
 
     my_socket.send(bytes(cabecera_b, 'utf-8') + b'\r\n')
