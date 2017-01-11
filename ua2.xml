@@ -1,0 +1,8 @@
+<config>
+    <account username="seanakasweet@gtasa.com" passwd="Grovestreetfamily"/>
+    <uaserver ip="127.0.0.1" puerto="5375"/>
+    <rtpaudio puerto="5740"/>
+    <regproxy ip="127.0.0.1" puerto="5678"/>
+    <log path="logau2.txt"/>
+    <audio path="cancion.mp3"/>
+</config>
