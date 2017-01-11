@@ -1,0 +1,8 @@
+<config>
+    <account username="melvinakaBS@gtasa.com" passwd="Grove_2004"/>
+    <uaserver ip="127.0.0.1" puerto="5065"/>
+    <rtpaudio puerto="5760"/>
+    <regproxy ip="127.0.0.1" puerto="5678"/>
+    <log path="logau1.txt"/>
+    <audio path="cancion.mp3"/>
+</config>
