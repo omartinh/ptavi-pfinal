@@ -86,7 +86,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             nonce = random.randint(0, 9999999999999999999)
 
             if method == 'REGISTER':
-                
+
                 if len(mensaje_c) == 8:
 
                     if mensaje_c[5].split(":")[0] == 'Authorization':
